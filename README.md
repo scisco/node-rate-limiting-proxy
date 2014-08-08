@@ -1,7 +1,7 @@
 node-rate-limiting-proxy
 ========================
 
-Redis-backed per-API-key rate-limiting reverse proxy
+Redis-backed per-API-key or IP-based rate-limiting reverse proxy
 
 ## Purpose
 
@@ -22,6 +22,8 @@ The proxy server will add the following headers to the response:
 * X-Rate-Limit-Limit -- the rate limit per minute for this resource
 * X-Rate-Limit-Remaining -- the number of requests remaining to this resource in this window
 * X-Rate-Limit-Reset -- the number of seconds until the window resets
+
+If the IP-based rate limit is activated, no API key is needed and requested are limited based a combination of client's IP-address and User Agent.
 
 ## Installation
 
