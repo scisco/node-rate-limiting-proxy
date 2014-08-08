@@ -6,6 +6,9 @@ module.exports = {
   // Proxy listens on this port. Hit this port to be forward to RL_API_URL
   RL_PORT: 4000,
 
+  // Limit access based on IP and User Agent
+  RL_IP_BASED: false,
+
   // Requests to me at port RL_PORT will be forwarded here
   RL_API_URL: 'http://localhost:8888',
 

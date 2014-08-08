@@ -45,20 +45,29 @@ var server = http.createServer(function(req, res) {
     if (rateLimitedResource) {
 
         // Abort if there is no API key given.
-        if (api_key == '') {
-            logRequest(400, '', '', 0, 0);
+        // or if it is not ip based
 
-            var body = '{"type": "API_KEY_REQUIRED", "message": "The api_key header was not present."}';
-            res.writeHead(400,{
-                'Content-Length': body.length,
-                'Content-Type': 'application/json'
-            });
-            res.write(body);
-            res.end('');
-            return;
+        if (!c.RL_IP_BASED) {
+            if (api_key == '') {
+                logRequest(400, '', '', 0, 0);
+
+                var body = '{"type": "API_KEY_REQUIRED", "message": "The api_key header was not present."}';
+                res.writeHead(400,{
+                    'Content-Length': body.length,
+                    'Content-Type': 'application/json'
+                });
+                res.write(body);
+                res.end('');
+                return;
+            } else {
+                var tableLookupKey = api_key + ":" + rateLimitedResource;
+            }
+
+        } else {
+            var tableLookupKey = req.connection.remoteAddress + ":" + rateLimitedResource + ":" + req.headers['user-agent'];
         }
 
-        var tableLookupKey = api_key + ":" + rateLimitedResource;
+
 
         // Increment the hit count to the resource
         ratelimit.add(tableLookupKey);
